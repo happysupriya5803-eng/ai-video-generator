@@ -1,307 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaHub AI — Models, Video Studio & Editor</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body {
+      background: #09090b;
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(9, 9, 11, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #27272a;
+      padding: 14px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .logo { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .logo-icon {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-weight: 700;
+    }
+    .logo span { color: #818cf8; }
+    .tabs {
+      display: flex;
+      background: #18181b;
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid #27272a;
+      gap: 4px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: #a1a1aa;
+      padding: 8px 16px;
+      border-radius: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .tab-btn.active { background: #4f46e5; color: #ffffff; }
+    .tab-btn:hover:not(.active) { color: #ffffff; }
 
-<title>ClipNova — Free AI Video Generator</title>
+    .hero {
+      text-align: center;
+      padding: 36px 20px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 34px;
+      font-weight: 700;
+      background: linear-gradient(to right, #ffffff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    .hero p { color: #a1a1aa; font-size: 15px; line-height: 1.5; }
 
-<style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Inter,Arial,sans-serif;
-}
+    .container {
+      max-width: 1120px;
+      width: 94%;
+      margin: 0 auto 40px;
+      flex: 1;
+    }
+    .section { display: none; }
+    .section.active { display: block; }
 
-body{
-  background:#05010a;
-  background-image:
-    radial-gradient(circle at top,#6d28d9 0%,#12001f 35%,#05010a 75%);
-  color:white;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-}
+    /* Studio Box */
+    .studio-card {
+      background: #111827;
+      border: 1px solid #27272a;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    iframe { width: 100%; height: 600px; border: none; display: block; }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 35px;
-  border-bottom:1px solid rgba(168,85,247,.2);
-  backdrop-filter:blur(10px);
-}
+    /* Models Grid */
+    .models-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .model-card {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    .model-card h3 { font-size: 17px; margin-bottom: 6px; }
+    .model-card p { font-size: 13px; color: #a1a1aa; line-height: 1.5; margin-bottom: 16px; }
+    .action-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #27272a;
+      color: white;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .action-btn:hover { background: #4f46e5; }
 
-.logo{
-  font-size:24px;
-  font-weight:800;
-  letter-spacing:-1px;
-}
-
-.logo span{
-  color:#c084fc;
-  text-shadow:0 0 10px #a855f7;
-}
-
-.badge{
-  background:rgba(168,85,247,.12);
-  border:1px solid rgba(168,85,247,.35);
-  padding:8px 14px;
-  border-radius:999px;
-  color:#d8b4fe;
-  font-size:12px;
-  font-weight:600;
-}
-
-.hero{
-  text-align:center;
-  max-width:780px;
-  margin:auto;
-  padding:50px 20px 30px;
-}
-
-.hero h1{
-  font-size:48px;
-  margin-bottom:12px;
-  background:linear-gradient(
-    to right,
-    #ffffff,
-    #d8b4fe,
-    #9333ea
-  );
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.hero p{
-  color:#b8b5c8;
-  line-height:1.6;
-}
-
-.app-container{
-  width:94%;
-  max-width:1150px;
-  margin:0 auto 35px;
-  background:#0f0818;
-  border-radius:20px;
-  overflow:hidden;
-  border:1px solid rgba(168,85,247,.25);
-  box-shadow:
-    0 0 30px rgba(168,85,247,.15),
-    0 25px 50px rgba(0,0,0,.6);
-}
-
-/* Prompt Section */
-
-.prompts{
-  padding:24px;
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.prompts h3{
-  margin-bottom:15px;
-  color:#d8b4fe;
-}
-
-.prompt-buttons{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-}
-
-.prompt-btn{
-  cursor:pointer;
-  border:none;
-  padding:12px 16px;
-  border-radius:12px;
-  background:#1c102b;
-  color:#f5f3ff;
-  border:1px solid rgba(168,85,247,.25);
-  transition:.25s;
-}
-
-.prompt-btn:hover{
-  background:#7e22ce;
-  transform:translateY(-2px);
-  box-shadow:0 0 18px rgba(168,85,247,.5);
-}
-
-.copy-msg{
-  margin-top:12px;
-  color:#a78bfa;
-  font-size:13px;
-}
-
-iframe{
-  width:100%;
-  height:650px;
-  border:none;
-}
-
-.how-it-works{
-  width:94%;
-  max-width:1100px;
-  margin:0 auto 50px;
-}
-
-.how-it-works h2{
-  text-align:center;
-  margin-bottom:25px;
-  color:#d8b4fe;
-}
-
-.steps{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:20px;
-}
-
-.step{
-  background:#12091e;
-  border:1px solid rgba(168,85,247,.2);
-  padding:25px;
-  border-radius:18px;
-}
-
-.step-number{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:#7e22ce;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:700;
-  margin-bottom:15px;
-  box-shadow:0 0 15px rgba(168,85,247,.5);
-}
-
-.step p{
-  color:#c4bdd8;
-  line-height:1.6;
-}
-
-footer{
-  text-align:center;
-  padding:18px;
-  color:#8f87a6;
-  border-top:1px solid rgba(255,255,255,.05);
-}
-</style>
+    /* Video Editor */
+    .editor-box {
+      background: #18181b;
+      border: 1px solid #27272a;
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .editor-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin: 16px 0;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #3f3f46;
+      background: #09090b;
+      color: white;
+      margin-top: 6px;
+    }
+    video { width: 100%; max-height: 400px; background: #000; border-radius: 10px; margin-top: 12px; }
+    footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 13px;
+      color: #71717a;
+      border-top: 1px solid #18181b;
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      Nova<span>Hub</span> AI
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('studio', this)">AI Video Studio</button>
+      <button class="tab-btn" onclick="showTab('models', this)">Model Hub</button>
+      <button class="tab-btn" onclick="showTab('editor', this)">Video Editor</button>
+    </div>
+  </header>
 
-<header>
-  <div class="logo">Clip<span>Nova</span></div>
-  <div class="badge">AI Video Generator</div>
-</header>
+  <section class="hero">
+    <h1>Create, Explore & Edit AI Videos Free</h1>
+    <p>Generate AI video clips, browse open-source models, and apply filters or speed edits right in your browser.</p>
+  </section>
 
-<section class="hero">
-  <h1>Turn Text Into Stunning AI Videos</h1>
-  <p>
-    Generate cinematic AI video clips from simple text prompts.
-    Fast, free and powered by open-source generative AI.
-  </p>
-</section>
-
-<main class="app-container">
-
-  <div class="prompts">
-    <h3>✨ Sample Prompts (Click to Copy)</h3>
-
-    <div class="prompt-buttons">
-      <button class="prompt-btn" onclick="copyPrompt(this)">
-        Futuristic neon city at night
-      </button>
-
-      <button class="prompt-btn" onclick="copyPrompt(this)">
-        Dragon flying above snowy mountains
-      </button>
-
-      <button class="prompt-btn" onclick="copyPrompt(this)">
-        Astronaut walking on Mars at sunset
-      </button>
-
-      <button class="prompt-btn" onclick="copyPrompt(this)">
-        Luxury sports car drifting through Tokyo
-      </button>
-
-      <button class="prompt-btn" onclick="copyPrompt(this)">
-        Magical forest with glowing creatures
-      </button>
+  <main class="container">
+    <!-- TAB 1: AI VIDEO STUDIO -->
+    <div id="studio" class="section active">
+      <div class="studio-card">
+        <iframe src="PASTE_YOUR_LINK_HERE" allow="clipboard-write"></iframe>
+      </div>
     </div>
 
-    <div class="copy-msg" id="copiedMessage"></div>
-  </div>
-
-  <!-- Replace after restarting Colab -->
-  <iframe
-    src="PASTE_YOUR_GRADIO_LINK_HERE"
-    allow="clipboard-write">
-  </iframe>
-
-</main>
-
-<section class="how-it-works">
-
-  <h2>How It Works</h2>
-
-  <div class="steps">
-
-    <div class="step">
-      <div class="step-number">1</div>
-      <p>
-        Type or copy a prompt describing the video scene
-        you want to generate.
-      </p>
+    <!-- TAB 2: MODEL HUB -->
+    <div id="models" class="section">
+      <div class="models-grid">
+        <div class="model-card">
+          <div>
+            <span class="tag">Text-to-Video</span>
+            <h3>Wan-AI / Wan 2.1</h3>
+            <p>High-motion open-source text-to-video generator built for smooth, realistic scenes.</p>
+          </div>
+          <button class="action-btn" onclick="showTab('studio', document.querySelectorAll('.tab-btn')[0])">Open in Studio →</button>
+        </div>
+        <div class="model-card">
+          <div>
+            <span class="tag">Text-to-Video</span>
+            <h3>THUDM / CogVideoX-2B</h3>
+            <p>Lightweight video generation model optimized for fast scene rendering.</p>
+          </div>
+          <button class="action-btn" onclick="showTab('studio', document.querySelectorAll('.tab-btn')[0])">Open in Studio →</button>
+        </div>
+        <div class="model-card">
+          <div>
+            <span class="tag">Browser Tool</span>
+            <h3>Built-in Clip Editor</h3>
+            <p>Adjust video playback speed, preview start points, and add cinematic color filters.</p>
+          </div>
+          <button class="action-btn" onclick="showTab('editor', document.querySelectorAll('.tab-btn')[2])">Open Video Editor →</button>
+        </div>
+      </div>
     </div>
 
-    <div class="step">
-      <div class="step-number">2</div>
-      <p>
-        The AI converts your text into visual frames and
-        motion sequences.
-      </p>
+    <!-- TAB 3: BUILT-IN VIDEO EDITOR -->
+    <div id="editor" class="section">
+      <div class="editor-box">
+        <h3>Quick Browser Video Editor</h3>
+        <p style="color:#a1a1aa; font-size:13px; margin-top:4px;">Upload your generated MP4 clip to adjust speed or apply visual filters.</p>
+        <input type="file" id="vidUpload" accept="video/*" style="margin-top:14px;" />
+        <video id="vidPlayer" controls></video>
+        <div class="editor-controls">
+          <div>
+            <label style="font-size:12px; color:#a1a1aa;">Playback Speed</label>
+            <select id="speedSelect" onchange="updateEditor()">
+              <option value="0.5">0.5x (Slow Motion)</option>
+              <option value="1" selected>1.0x (Normal)</option>
+              <option value="1.5">1.5x (Fast)</option>
+              <option value="2">2.0x (2x Speed)</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size:12px; color:#a1a1aa;">Visual Filter</label>
+            <select id="filterSelect" onchange="updateEditor()">
+              <option value="none">Original</option>
+              <option value="grayscale(100%)">Black & White</option>
+              <option value="contrast(130%) saturate(140%)">Cinematic Vivid</option>
+              <option value="sepia(65%)">Warm Vintage</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
+  </main>
 
-    <div class="step">
-      <div class="step-number">3</div>
-      <p>
-        Wait a few moments while the video is rendered by
-        the model.
-      </p>
-    </div>
+  <footer>NovaHub AI • Free Open-Source Video Studio</footer>
 
-    <div class="step">
-      <div class="step-number">4</div>
-      <p>
-        Download and share your generated video anywhere
-        you like.
-      </p>
-    </div>
+  <script>
+    function showTab(tabId, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
 
-  </div>
+    const vidUpload = document.getElementById('vidUpload');
+    const vidPlayer = document.getElementById('vidPlayer');
+    vidUpload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) vidPlayer.src = URL.createObjectURL(file);
+    });
 
-</section>
-
-<footer>
-  Powered by Open‑Source Generative AI • ClipNova Studio
-</footer>
-
-<script>
-function copyPrompt(button){
-  navigator.clipboard.writeText(button.innerText);
-
-  document.getElementById("copiedMessage").innerText =
-    "✅ Prompt copied: " + button.innerText;
-
-  setTimeout(()=>{
-    document.getElementById("copiedMessage").innerText="";
-  },2500);
-}
-</script>
-
+    function updateEditor() {
+      vidPlayer.playbackRate = parseFloat(document.getElementById('speedSelect').value);
+      vidPlayer.style.filter = document.getElementById('filterSelect').value;
+    }
+  </script>
 </body>
 </html>
