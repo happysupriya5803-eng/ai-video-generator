@@ -3,14 +3,91 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free AI Video Generator</title>
+  <title>NovaMotion AI — Free Text-to-Video Studio</title>
+  <link href="https://googleapis.com" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; overflow: hidden; background: #0f172a; }
-    iframe { width: 100%; height: 100%; border: none; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body {
+      background: radial-gradient(circle at top, #1e1b4b 0%, #09090b 65%);
+      color: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 18px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+    }
+    .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+    .logo span { color: #818cf8; }
+    .badge {
+      background: rgba(129, 140, 248, 0.15);
+      color: #a5b4fc;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(129, 140, 248, 0.3);
+    }
+    .hero {
+      text-align: center;
+      padding: 36px 20px 24px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      background: linear-gradient(to right, #ffffff, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    .hero p { color: #94a3b8; font-size: 15px; line-height: 1.5; }
+    .app-container {
+      flex: 1;
+      max-width: 1100px;
+      width: 94%;
+      margin: 0 auto 36px;
+      background: #111827;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      overflow: hidden;
+      min-height: 620px;
+    }
+    iframe { width: 100%; height: 640px; border: none; display: block; }
+    footer {
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      color: #64748b;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
   </style>
 </head>
 <body>
-  <iframe src="https://494b8ce3ca53670f40.gradio.live" allow="clipboard-write"></iframe>
+  <header>
+    <div class="logo">Nova<span>Motion</span> AI</div>
+    <div class="badge">Free AI Video Studio</div>
+  </header>
+
+  <section class="hero">
+    <h1>Turn Your Ideas Into AI Videos</h1>
+    <p>Type a descriptive scene below and generate smooth AI video clips in seconds—completely free.</p>
+  </section>
+
+  <main class="app-container">
+    <!-- Replace the link below whenever you restart Google Colab -->
+    <iframe src="https://494b8ce3ca53670f40.gradio.live" allow="clipboard-write"></iframe>
+  </main>
+
+  <footer>
+    Powered by Open-Source Generative AI • NovaMotion Studio
+  </footer>
 </body>
 </html>
