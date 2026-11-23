@@ -1,93 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NovaMotion AI — Free Text-to-Video Studio</title>
-  <link href="https://googleapis.com" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-    body {
-      background: radial-gradient(circle at top, #1e1b4b 0%, #09090b 65%);
-      color: #f8fafc;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      padding: 18px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(10px);
-    }
-    .logo { font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
-    .logo span { color: #818cf8; }
-    .badge {
-      background: rgba(129, 140, 248, 0.15);
-      color: #a5b4fc;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      border: 1px solid rgba(129, 140, 248, 0.3);
-    }
-    .hero {
-      text-align: center;
-      padding: 36px 20px 24px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .hero h1 {
-      font-size: 36px;
-      font-weight: 700;
-      background: linear-gradient(to right, #ffffff, #a5b4fc);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-    }
-    .hero p { color: #94a3b8; font-size: 15px; line-height: 1.5; }
-    .app-container {
-      flex: 1;
-      max-width: 1100px;
-      width: 94%;
-      margin: 0 auto 36px;
-      background: #111827;
-      border-radius: 18px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-      overflow: hidden;
-      min-height: 620px;
-    }
-    iframe { width: 100%; height: 640px; border: none; display: block; }
-    footer {
-      text-align: center;
-      padding: 16px;
-      font-size: 13px;
-      color: #64748b;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>ClipNova — Free AI Video Generator</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,Arial,sans-serif;
+}
+
+body{
+  background:#05010a;
+  background-image:
+    radial-gradient(circle at top,#6d28d9 0%,#12001f 35%,#05010a 75%);
+  color:white;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 35px;
+  border-bottom:1px solid rgba(168,85,247,.2);
+  backdrop-filter:blur(10px);
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:-1px;
+}
+
+.logo span{
+  color:#c084fc;
+  text-shadow:0 0 10px #a855f7;
+}
+
+.badge{
+  background:rgba(168,85,247,.12);
+  border:1px solid rgba(168,85,247,.35);
+  padding:8px 14px;
+  border-radius:999px;
+  color:#d8b4fe;
+  font-size:12px;
+  font-weight:600;
+}
+
+.hero{
+  text-align:center;
+  max-width:780px;
+  margin:auto;
+  padding:50px 20px 30px;
+}
+
+.hero h1{
+  font-size:48px;
+  margin-bottom:12px;
+  background:linear-gradient(
+    to right,
+    #ffffff,
+    #d8b4fe,
+    #9333ea
+  );
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero p{
+  color:#b8b5c8;
+  line-height:1.6;
+}
+
+.app-container{
+  width:94%;
+  max-width:1150px;
+  margin:0 auto 35px;
+  background:#0f0818;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid rgba(168,85,247,.25);
+  box-shadow:
+    0 0 30px rgba(168,85,247,.15),
+    0 25px 50px rgba(0,0,0,.6);
+}
+
+/* Prompt Section */
+
+.prompts{
+  padding:24px;
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.prompts h3{
+  margin-bottom:15px;
+  color:#d8b4fe;
+}
+
+.prompt-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.prompt-btn{
+  cursor:pointer;
+  border:none;
+  padding:12px 16px;
+  border-radius:12px;
+  background:#1c102b;
+  color:#f5f3ff;
+  border:1px solid rgba(168,85,247,.25);
+  transition:.25s;
+}
+
+.prompt-btn:hover{
+  background:#7e22ce;
+  transform:translateY(-2px);
+  box-shadow:0 0 18px rgba(168,85,247,.5);
+}
+
+.copy-msg{
+  margin-top:12px;
+  color:#a78bfa;
+  font-size:13px;
+}
+
+iframe{
+  width:100%;
+  height:650px;
+  border:none;
+}
+
+.how-it-works{
+  width:94%;
+  max-width:1100px;
+  margin:0 auto 50px;
+}
+
+.how-it-works h2{
+  text-align:center;
+  margin-bottom:25px;
+  color:#d8b4fe;
+}
+
+.steps{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+}
+
+.step{
+  background:#12091e;
+  border:1px solid rgba(168,85,247,.2);
+  padding:25px;
+  border-radius:18px;
+}
+
+.step-number{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:#7e22ce;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  margin-bottom:15px;
+  box-shadow:0 0 15px rgba(168,85,247,.5);
+}
+
+.step p{
+  color:#c4bdd8;
+  line-height:1.6;
+}
+
+footer{
+  text-align:center;
+  padding:18px;
+  color:#8f87a6;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">Nova<span>Motion</span> AI</div>
-    <div class="badge">Free AI Video Studio</div>
-  </header>
 
-  <section class="hero">
-    <h1>Turn Your Ideas Into AI Videos</h1>
-    <p>Type a descriptive scene below and generate smooth AI video clips in seconds—completely free.</p>
-  </section>
+<header>
+  <div class="logo">Clip<span>Nova</span></div>
+  <div class="badge">AI Video Generator</div>
+</header>
 
-  <main class="app-container">
-    <!-- Replace the link below whenever you restart Google Colab -->
-    <iframe src="https://494b8ce3ca53670f40.gradio.live" allow="clipboard-write"></iframe>
-  </main>
+<section class="hero">
+  <h1>Turn Text Into Stunning AI Videos</h1>
+  <p>
+    Generate cinematic AI video clips from simple text prompts.
+    Fast, free and powered by open-source generative AI.
+  </p>
+</section>
 
-  <footer>
-    Powered by Open-Source Generative AI • NovaMotion Studio
-  </footer>
+<main class="app-container">
+
+  <div class="prompts">
+    <h3>✨ Sample Prompts (Click to Copy)</h3>
+
+    <div class="prompt-buttons">
+      <button class="prompt-btn" onclick="copyPrompt(this)">
+        Futuristic neon city at night
+      </button>
+
+      <button class="prompt-btn" onclick="copyPrompt(this)">
+        Dragon flying above snowy mountains
+      </button>
+
+      <button class="prompt-btn" onclick="copyPrompt(this)">
+        Astronaut walking on Mars at sunset
+      </button>
+
+      <button class="prompt-btn" onclick="copyPrompt(this)">
+        Luxury sports car drifting through Tokyo
+      </button>
+
+      <button class="prompt-btn" onclick="copyPrompt(this)">
+        Magical forest with glowing creatures
+      </button>
+    </div>
+
+    <div class="copy-msg" id="copiedMessage"></div>
+  </div>
+
+  <!-- Replace after restarting Colab -->
+  <iframe
+    src="PASTE_YOUR_GRADIO_LINK_HERE"
+    allow="clipboard-write">
+  </iframe>
+
+</main>
+
+<section class="how-it-works">
+
+  <h2>How It Works</h2>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-number">1</div>
+      <p>
+        Type or copy a prompt describing the video scene
+        you want to generate.
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="step-number">2</div>
+      <p>
+        The AI converts your text into visual frames and
+        motion sequences.
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="step-number">3</div>
+      <p>
+        Wait a few moments while the video is rendered by
+        the model.
+      </p>
+    </div>
+
+    <div class="step">
+      <div class="step-number">4</div>
+      <p>
+        Download and share your generated video anywhere
+        you like.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+  Powered by Open‑Source Generative AI • ClipNova Studio
+</footer>
+
+<script>
+function copyPrompt(button){
+  navigator.clipboard.writeText(button.innerText);
+
+  document.getElementById("copiedMessage").innerText =
+    "✅ Prompt copied: " + button.innerText;
+
+  setTimeout(()=>{
+    document.getElementById("copiedMessage").innerText="";
+  },2500);
+}
+</script>
+
 </body>
 </html>
